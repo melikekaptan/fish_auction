@@ -12,7 +12,7 @@ public:
         uint32_t represented_time = 0;
 
         AuctionProduct(uint32_t base_price);
-        uint32_t IncreasePrice(uint32_t added);
+        void IncreasePrice(uint32_t added);
         void SendBack();
         
 };

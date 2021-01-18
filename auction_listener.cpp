@@ -1,6 +1,8 @@
 #include </usr/local/include/librdkafka/rdkafkacpp.h>
 #include "auction_listener.h"
 
+#include <iostream>
+#include <string>
 #include <cstdlib>
 #include <cstdio>
 #include <csignal>
@@ -439,18 +441,3 @@ void AuctionListener::AuctionServiceListener() {
         
 }
 
-void Auction::place_auction() {
-
-        std::map<std::string, uint32_t>::iterator itr;
-        for( itr = Auction::auction_table.begin() ; itr != Auction::auction_table.end() ; ++itr) {
-            AuctionProduct product(itr->second);
-            //timer starts here
-            ++product.represented_time;
-            std::cout << "auction placement start here" << std::endl;
-            std::cout << "represented time of this product:" <<std::endl;
-            std::cout << product.represented_time << std::endl;
-
-        }
-
-
-}

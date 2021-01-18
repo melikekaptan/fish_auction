@@ -6,4 +6,4 @@ class AuctionListener {
     public:
 
         void AuctionServiceListener();
-}
+};

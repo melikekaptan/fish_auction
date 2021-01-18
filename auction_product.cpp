@@ -11,9 +11,9 @@ AuctionProduct::AuctionProduct(uint32_t base_price) {
         std::cout << base_price << std::endl;
 }
 
-uint32_t AuctionProduct::IncreasePrice(uint32_t added) {
+void AuctionProduct::IncreasePrice(uint32_t added) {
 
-    return AuctionProduct::initial + added;
+     AuctionProduct::initial += added;
 
 }
 
