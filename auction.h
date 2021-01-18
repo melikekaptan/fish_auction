@@ -1,5 +1,7 @@
 #pragma once
 
+#include "auction_product.h"
+
 #include <iostream>
 #include <map>
 #include <exception>
@@ -22,9 +24,8 @@ public:
 
         Auction (); 
         //void ReadAuctionTable();
-        void AuctionServiceListener();
         void place_auction();
-        //void WatchForIncrease(AuctionProduct);
+        void BidListener(AuctionProduct);
 
 };
 
