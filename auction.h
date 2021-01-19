@@ -25,7 +25,6 @@ public:
         Auction (); 
         //void ReadAuctionTable();
         void place_auction();
-        void BidListener(AuctionProduct);
 
 };
 

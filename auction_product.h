@@ -13,6 +13,7 @@ public:
 
         AuctionProduct(uint32_t base_price);
         void IncreasePrice(uint32_t added);
+        void DeliverFinalPrice();
         void SendBack();
         
 };

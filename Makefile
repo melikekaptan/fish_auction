@@ -1,5 +1,5 @@
 CC = g++
-CFLAGS = -I/usr/local/include/librdkafka -L/usr/local/lib -lrdkafka++
+CFLAGS = -I/usr/local/include/librdkafka -L/usr/local/lib -lpthread -lrdkafka++
  
 # ****************************************************
 # Targets needed to bring the executable up to date

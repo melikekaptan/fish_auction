@@ -17,6 +17,12 @@ void AuctionProduct::IncreasePrice(uint32_t added) {
 
 }
 
+void AuctionProduct::DeliverFinalPrice() {
+
+    AuctionProduct::final_price = AuctionProduct::initial;
+
+}
+
 void AuctionProduct::SendBack() {
 
 
