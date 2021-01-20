@@ -10,6 +10,17 @@
 #include <thread>
 
 
+void SendBack(AuctionProduct product) {
+
+    std::cout << "product sent back" << std::endl;
+
+}
+
+void SellProduct() {
+
+    std::cout << "Product sold" << std::endl;
+}
+
 
 void BidListener(AuctionProduct product) {
 
@@ -21,10 +32,18 @@ void BidListener(AuctionProduct product) {
             std::cout << "is there a bid ? (Y) yes, (N) no";
             std::cin >>user_reaction;
             if (user_reaction == 'Y')
-              product.IncreasePrice(added);
+                product.IncreasePrice(added);
+                std::cout << "increased price of the product:" << std::endl;
+                std::cout << product.initial << std::endl;
             if (user_reaction == 'N') {
-              product.DeliverFinalPrice();
-              break;
+                product.DeliverFinalPrice();
+                std::cout << "final price of the product:" <<std::endl;
+                std::cout << product.final_price << std::endl;
+                    if (product.final_price == product.base_price)
+                        SendBack(product);
+                    else 
+                        SellProduct();
+                break;
             }
         }
 }
@@ -56,6 +75,7 @@ Auction::Auction () {
     }
 
 }
+
 
 void Auction::place_auction() {
 
