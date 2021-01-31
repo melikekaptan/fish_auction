@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <string>
+#include <sstream>
 #include <cstdlib>
 #include <cstdio>
 #include <csignal>
@@ -10,6 +11,8 @@
 #include <sys/time.h>
 #include <getopt.h>
 #include <unistd.h>
+#include <regex>
+#include <vector>
 
 static volatile sig_atomic_t run = 1;
 static bool exit_eof = false;
@@ -23,6 +26,7 @@ static void sigterm (int sig) {
 }
 
 
+        
 /**
  * @brief format a string timestamp from the current time
  */
@@ -124,7 +128,7 @@ public:
 };
 
 
-void msg_consume(RdKafka::Message* message, void* opaque) {
+void AuctionListener::msg_consume(RdKafka::Message* message, std::vector<fish_product> &list_of_products, void* opaque) {
   switch (message->err()) {
     case RdKafka::ERR__TIMED_OUT:
       break;
@@ -150,9 +154,76 @@ void msg_consume(RdKafka::Message* message, void* opaque) {
         std::cout << "Key: " << *message->key() << std::endl;
       }
       if (verbosity >= 1) {
-        printf("%.*s\n",
-               static_cast<int>(message->len()),
-               static_cast<const char *>(message->payload()));
+        // printf("%.*s\n",
+        //        static_cast<int>(message->len()),
+        //        static_cast<const char *>(message->payload()));
+
+               auto msg = message->payload();
+
+               std::cout << "string message:" <<std::endl;
+               const char *message_payload;
+               message_payload = static_cast<char*>(message->payload());
+               std::string s(message_payload);
+               std::cout << "kfkfk" + s << std::endl;
+
+
+               int opt;
+
+                std::smatch m;
+                std::regex str_expr1 ("fish_id");
+                std::regex str_expr2 ("fish_type");
+                std::regex str_expr3 ("quantity");
+                std::regex str_expr4 ("fisherman_id");
+                std::regex str_expr5 ("fisherman_name");
+                std::regex str_expr6 ("fisherman_surname");
+                std::regex str_expr7 ("price");
+
+                std::array <std::regex, 7> my_regex_matches{ {str_expr1, str_expr2, str_expr3, str_expr4, str_expr5, str_expr6, str_expr7} };
+
+                std::array<std::string, 7> fish_product_array {{}};
+                for (int k = 0; k<7; k++) {
+                  std::regex_search ( s, m, my_regex_matches[k] );
+                  for (unsigned i=0; i<m.size(); ++i) {
+                  
+                        std::string remaining = s.substr(m.position() + 1);
+      
+                        size_t pos = remaining.find_first_of(":");
+                        size_t pos_ = remaining.find_first_of(",");
+                        size_t interval = pos_ - pos;
+                        fish_product_array[k] = remaining.substr(pos + 1, interval-1);
+                  }
+                }
+
+                fish_product product;
+                std::stringstream strm(fish_product_array[0]);
+                strm >> product.fish_id;
+
+                product.fish_type = fish_product_array[1].substr(1, fish_product_array[1].size() - 2);
+
+                std::string word;
+                word = fish_product_array[2].substr(1, fish_product_array[2].size() - 2);
+                product.quantity = atof(word.c_str());
+
+                std::stringstream strm__(fish_product_array[3]);
+                strm__ >> product.fisherman_id;
+
+                product.fisherman_name = fish_product_array[4].substr(1, fish_product_array[4].size() - 2);
+                product.fisherman_surname = fish_product_array[5].substr(1, fish_product_array[5].size() - 2);
+
+                std::stringstream strm___(fish_product_array[6]);
+                strm___ >> product.price;
+
+                              
+                list_of_products.push_back(product);
+           
+                std::cout << "one item added to the list of products" << std::endl;    
+                std::cout << product.fish_id << std::endl;
+                std::cout << product.fish_type << std::endl;
+                std::cout << product.quantity << std::endl;
+                std::cout << product.fisherman_id << std::endl;
+                std::cout << product.fisherman_name << std::endl;
+                std::cout << product.fisherman_surname << std::endl;
+                std::cout << product.price << std::endl;      
       }
       break;
 
@@ -178,7 +249,7 @@ void msg_consume(RdKafka::Message* message, void* opaque) {
   }
 }
 
-void AuctionListener::AuctionServiceListener() {
+void AuctionListener::AuctionServiceListener(std::vector<fish_product> &list_of_products) {
 
     std::string brokers = "localhost";
   std::string errstr;
@@ -205,7 +276,7 @@ void AuctionListener::AuctionServiceListener() {
                  exit(1);
        }
 
-    topics.push_back(std::string("0"));
+    topics.push_back(std::string("TestTopic"));
 
 //   while ((opt = getopt(argc, argv, "g:b:z:qd:eX:AM:qv")) != -1) {
 //     switch (opt) {
@@ -413,8 +484,9 @@ void AuctionListener::AuctionServiceListener() {
    */
   while (run) {
     RdKafka::Message *msg = consumer->consume(1000);
-    msg_consume(msg, NULL);
+    this->msg_consume(msg, list_of_products, NULL);
     delete msg;
+
   }
 
 #ifndef _WIN32

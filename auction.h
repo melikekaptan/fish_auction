@@ -1,6 +1,7 @@
 #pragma once
 
 #include "auction_product.h"
+#include "auction_listener.h"
 
 #include <iostream>
 #include <map>
@@ -20,8 +21,8 @@ class Auction {
 
 public:
 
-        std::map<std::string, uint32_t> auction_table;
 
+        static std::vector <fish_product> list_of_products;
         Auction (); 
         //void ReadAuctionTable();
         void place_auction();

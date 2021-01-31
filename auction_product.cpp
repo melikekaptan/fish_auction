@@ -2,9 +2,9 @@
 
 #include <iostream>
 
-uint32_t AuctionProduct::initial = 0;
+int AuctionProduct::initial = 0;
 
-AuctionProduct::AuctionProduct(uint32_t price) {
+AuctionProduct::AuctionProduct(int price, std::string &fish_type, double quantity) {
         std::cout << "auction product formed" << std::endl;
         AuctionProduct::initial = price;
         AuctionProduct::base_price = price;
@@ -12,7 +12,7 @@ AuctionProduct::AuctionProduct(uint32_t price) {
         std::cout << base_price << std::endl;
 }
 
-void AuctionProduct::IncreasePrice(uint32_t added) {
+void AuctionProduct::IncreasePrice(int added) {
 
      AuctionProduct::initial += added;
 

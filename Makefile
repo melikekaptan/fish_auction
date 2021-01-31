@@ -10,7 +10,7 @@ auction_test: auction_test.o auction_product.o auction.o auction_listener.o
 # The main.o target can be written more simply
  
 auction_test.o: auction_test.cpp auction_product.h auction.h
-	$(CC) $(CFLAGS) -c auction_test.cpp
+	$(CC) -g $(CFLAGS) -c auction_test.cpp
  
 auction_product.o: auction_product.h
  

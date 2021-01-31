@@ -7,13 +7,13 @@ class AuctionProduct {
 
 public:
   
-        uint32_t final_price;
-        static uint32_t initial;
-        uint32_t base_price;
+        int final_price;
+        static int initial;
+        int base_price;
         uint32_t represented_time = 0;
 
-        AuctionProduct(uint32_t base_price);
-        void IncreasePrice(uint32_t added);
+        AuctionProduct(int base_price, std::string &fish_type, double quantity);
+        void IncreasePrice(int added);
         void DeliverFinalPrice();
         
         

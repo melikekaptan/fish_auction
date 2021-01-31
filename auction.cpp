@@ -1,5 +1,6 @@
 #include "auction.h"
 #include "auction_product.h"
+#include "auction_listener.h"
 
 #include <iostream>
 #include <fstream>
@@ -14,6 +15,7 @@ void SendBack(AuctionProduct product) {
 
     std::cout << "product sent back" << std::endl;
 
+
 }
 
 void SellProduct() {
@@ -22,20 +24,17 @@ void SellProduct() {
 }
 
 
-void BidListener(AuctionProduct product) {
+void BidListener(AuctionProduct product, std::array<bool, 5> increase) {
 
-        uint32_t added = 10;
+        int added = 10;
         std::cout << "bid listener listens" << std::endl;
-        char user_reaction; 
 
-        for (int i=0; i < 15; i++) {
-            std::cout << "is there a bid ? (Y) yes, (N) no";
-            std::cin >>user_reaction;
-            if (user_reaction == 'Y')
+        for (int i=0; i < 5; i++) {
+            if (increase[i] == 1)
                 product.IncreasePrice(added);
                 std::cout << "increased price of the product:" << std::endl;
                 std::cout << product.initial << std::endl;
-            if (user_reaction == 'N') {
+            if (increase[i] == 0) {
                 product.DeliverFinalPrice();
                 std::cout << "final price of the product:" <<std::endl;
                 std::cout << product.final_price << std::endl;
@@ -48,30 +47,17 @@ void BidListener(AuctionProduct product) {
         }
 }
 
+std::vector <fish_product> Auction::list_of_products {};
+
 Auction::Auction () {
 
-    std::ifstream auction_file;
-    std::string line;
-    std::string product_name;
-    uint32_t price;
-
-    try {
-        
-        auction_file.open("auction_table.txt");
-        
-        if (!auction_file.is_open())
-            throw ;
-         
-            while (std::getline(auction_file, line)) {
-                std::stringstream s(line);
-                std::cout <<  line << std::endl;
-                s >> product_name >> price;
-               auction_table.emplace(product_name, price);
-            }
-        
-        }
-    catch (std::exception& e) {
-        std::cout<< e.what();
+    try { 
+        AuctionListener listener;
+        listener.AuctionServiceListener(list_of_products);
+    }
+    catch (const std::exception& e) {
+        std::cout << "auction listener cannot start" << std::endl;
+		throw std::runtime_error (e.what());
     }
 
 }
@@ -79,19 +65,18 @@ Auction::Auction () {
 
 void Auction::place_auction() {
 
-        std::map<std::string, uint32_t>::iterator itr;
-        for( itr = Auction::auction_table.begin() ; itr != Auction::auction_table.end() ; ++itr) {
-            AuctionProduct product(itr->second);
+        for(auto p : Auction::list_of_products) {
+            AuctionProduct product(p.price, p.fish_type, p.quantity);
+
+            std::array<bool, 5> increase = {1,1,1,0,0};
 
             //timer starts here
-            std::thread t(BidListener, product);
+            std::thread t(BidListener, product, increase);
 
             t.join();
 
-            ++product.represented_time;
-            std::cout << itr->second << std::endl;
-            std::cout << "represented time of this product:" <<std::endl;
-            std::cout << product.represented_time << std::endl;
+            std::cout << p.fish_type << std::endl;
+            std::cout << "represented " <<std::endl;
 
         }
 }
