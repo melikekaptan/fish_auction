@@ -23,6 +23,7 @@ public:
 
 
         static std::vector <fish_product> list_of_products;
+        static std::vector <AuctionProduct> second_round_list_of_products;
         Auction (); 
         //void ReadAuctionTable();
         void place_auction();

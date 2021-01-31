@@ -6,7 +6,7 @@
 class AuctionProduct {
 
 public:
-  
+        std::string type;
         int final_price;
         static int initial;
         int base_price;

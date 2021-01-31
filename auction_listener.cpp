@@ -164,11 +164,8 @@ void AuctionListener::msg_consume(RdKafka::Message* message, std::vector<fish_pr
                const char *message_payload;
                message_payload = static_cast<char*>(message->payload());
                std::string s(message_payload);
-               std::cout << "kfkfk" + s << std::endl;
 
-
-               int opt;
-
+               
                 std::smatch m;
                 std::regex str_expr1 ("fish_id");
                 std::regex str_expr2 ("fish_type");
