@@ -7,10 +7,15 @@
 #include <iterator>
 #include <string>
 #include <sstream>
-#include <map>
 #include <thread>
+#include <unistd.h>
 #include <vector>
+#include <csignal>
 
+static volatile sig_atomic_t run = 1;
+static void sigterm (int sig) {
+  run = 0;
+}
 
 void SendBack(AuctionProduct &product) {
 
@@ -33,10 +38,12 @@ void BidListener(AuctionProduct product, std::array<bool, 5> arr) {
         for (int i=0; i < 5; i++) {
             if (arr[i] == 1)
                 product.IncreasePrice(added);
+                std::this_thread::sleep_for (std::chrono::seconds(1));
                 std::cout << "increased price of the product:" << std::endl;
                 std::cout << product.initial << std::endl;
             if (arr[i] == 0) {
                 product.DeliverFinalPrice();
+      
                 std::cout << "final price of the product:" <<std::endl;
                 std::cout << product.final_price << std::endl;
                     if (product.final_price == product.base_price)
@@ -54,9 +61,17 @@ std::vector <AuctionProduct> Auction::second_round_list_of_products {};
 
 Auction::Auction () {
 
+     signal(SIGINT, sigterm);
+     signal(SIGTERM, sigterm);
+
     try { 
-        AuctionListener listener;
-        listener.AuctionServiceListener(list_of_products);
+        std::cout << "Press Ctrl-C when you finish adding the products" << std::endl;
+        AuctionListener *listener;
+        listener->AuctionServiceListener(list_of_products);
+
+        if (!run) {
+            delete listener;
+        } 
     }
     catch (const std::exception& e) {
         std::cout << "auction listener cannot start" << std::endl;
