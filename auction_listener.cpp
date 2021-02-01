@@ -165,7 +165,7 @@ void AuctionListener::msg_consume(RdKafka::Message* message, std::vector<fish_pr
                message_payload = static_cast<char*>(message->payload());
                std::string s(message_payload);
 
-               
+
                 std::smatch m;
                 std::regex str_expr1 ("fish_id");
                 std::regex str_expr2 ("fish_type");
@@ -274,132 +274,6 @@ void AuctionListener::AuctionServiceListener(std::vector<fish_product> &list_of_
        }
 
     topics.push_back(std::string("TestTopic"));
-
-//   while ((opt = getopt(argc, argv, "g:b:z:qd:eX:AM:qv")) != -1) {
-//     switch (opt) {
-//     case 'g':
-//       if (conf->set("group.id",  optarg, errstr) != RdKafka::Conf::CONF_OK) {
-//         std::cerr << errstr << std::endl;
-//         exit(1);
-//       }
-//       break;
-//     case 'b':
-//       brokers = optarg;
-//       break;
-//     case 'z':
-//       if (conf->set("compression.codec", optarg, errstr) !=
-// 	  RdKafka::Conf::CONF_OK) {
-// 	std::cerr << errstr << std::endl;
-// 	exit(1);
-//       }
-//       break;
-//     case 'e':
-//       exit_eof = true;
-//       break;
-//     case 'd':
-//       debug = optarg;
-//       break;
-//     case 'M':
-//       if (conf->set("statistics.interval.ms", optarg, errstr) !=
-//           RdKafka::Conf::CONF_OK) {
-//         std::cerr << errstr << std::endl;
-//         exit(1);
-//       }
-//       break;
-//     case 'X':
-//       {
-// 	char *name, *val;
-
-// 	if (!strcmp(optarg, "dump")) {
-// 	  do_conf_dump = true;
-// 	  continue;
-// 	}
-
-// 	name = optarg;
-// 	if (!(val = strchr(name, '='))) {
-//           std::cerr << "%% Expected -X property=value, not " <<
-//               name << std::endl;
-// 	  exit(1);
-// 	}
-
-// 	*val = '\0';
-// 	val++;
-
-// 	/* Try "topic." prefixed properties on topic
-// 	 * conf first, and then fall through to global if
-// 	 * it didnt match a topic configuration property. */
-//         RdKafka::Conf::ConfResult res = RdKafka::Conf::CONF_UNKNOWN;
-// 	if (!strncmp(name, "topic.", strlen("topic.")))
-//           res = tconf->set(name+strlen("topic."), val, errstr);
-//         if (res == RdKafka::Conf::CONF_UNKNOWN)
-// 	  res = conf->set(name, val, errstr);
-
-// 	if (res != RdKafka::Conf::CONF_OK) {
-//           std::cerr << errstr << std::endl;
-// 	  exit(1);
-// 	}
-//       }
-//       break;
-
-//       case 'q':
-//         verbosity--;
-//         break;
-
-//       case 'v':
-//         verbosity++;
-//         break;
-
-//     default:
-//       goto usage;
-//     }
-//   }
-
-//   for (; optind < argc ; optind++)
-    // topics.push_back(std::string(argv[optind]));
-
-//   if (topics.empty() || optind != argc) {
-//   usage:
-//     fprintf(stderr,
-//             "Usage: %s -g <group-id> [options] topic1 topic2..\n"
-//             "\n"
-//             "librdkafka version %s (0x%08x)\n"
-//             "\n"
-//             " Options:\n"
-//             "  -g <group-id>   Consumer group id\n"
-//             "  -b <brokers>    Broker address (localhost:9092)\n"
-//             "  -z <codec>      Enable compression:\n"
-//             "                  none|gzip|snappy\n"
-//             "  -e              Exit consumer when last message\n"
-//             "                  in partition has been received.\n"
-//             "  -d [facs..]     Enable debugging contexts:\n"
-//             "                  %s\n"
-//             "  -M <intervalms> Enable statistics\n"
-//             "  -X <prop=name>  Set arbitrary librdkafka "
-//             "configuration property\n"
-//             "                  Properties prefixed with \"topic.\" "
-//             "will be set on topic object.\n"
-//             "                  Use '-X list' to see the full list\n"
-//             "                  of supported properties.\n"
-//             "  -q              Quiet / Decrease verbosity\n"
-//             "  -v              Increase verbosity\n"
-//             "\n"
-//             "\n",
-// 	    argv[0],
-// 	    RdKafka::version_str().c_str(), RdKafka::version(),
-// 	    RdKafka::get_debug_contexts().c_str());
-// 	exit(1);
-//   }
-
-  if (exit_eof) {
-    std::string strategy;
-    if (conf->get("partition.assignment.strategy", strategy) ==
-        RdKafka::Conf::CONF_OK && strategy == "cooperative-sticky") {
-      std::cerr << "Error: this example has not been modified to " <<
-        "support -e (exit on EOF) when the partition.assignment.strategy " <<
-        "is set to " << strategy << ": remove -e from the command line\n";
-      exit(1);
-    }
-  }
 
   /*
    * Set configuration properties
