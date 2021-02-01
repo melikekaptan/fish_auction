@@ -17,17 +17,25 @@ static void sigterm (int sig) {
   run = 0;
 }
 
-void SendBack(AuctionProduct &product) {
-
-    std::cout << "product sent back " << product.type << std::endl;
-    Auction::second_round_list_of_products.push_back(product);
-
-}
-
 void SellProduct(AuctionProduct &product) {
 
     std::cout << "Product sold: " << product.type << " with final price " << product.final_price << std::endl;
 }
+
+
+void SendBack(AuctionProduct &product) {
+
+    std::cout << "product sent back " << product.type << std::endl;
+    if (product.represented_time < 2) {
+        Auction::second_round_list_of_products.push_back(product);
+    }
+    else {
+        SellProduct(product);
+    }
+
+}
+
+
 
 
 void BidListener(AuctionProduct product, std::array<bool, 5> arr) {
@@ -37,14 +45,14 @@ void BidListener(AuctionProduct product, std::array<bool, 5> arr) {
 
         for (int i=0; i < 5; i++) {
             if (arr[i] == 1)
-                product.IncreasePrice(added);
                 std::this_thread::sleep_for (std::chrono::seconds(1));
-                std::cout << "increased price of the product:" << std::endl;
+                product.IncreasePrice(added);
+                std::cout << "increased price of the product:" + product.type << std::endl;
                 std::cout << product.initial << std::endl;
             if (arr[i] == 0) {
                 product.DeliverFinalPrice();
       
-                std::cout << "final price of the product:" <<std::endl;
+                std::cout << "final price of the product:" + product.type <<std::endl;
                 std::cout << product.final_price << std::endl;
                     if (product.final_price == product.base_price)
                         SendBack(product);
@@ -52,6 +60,7 @@ void BidListener(AuctionProduct product, std::array<bool, 5> arr) {
                         SellProduct(product);
                 break;
             }
+            ++product.represented_time; 
         }
 }
 
@@ -86,17 +95,14 @@ void Auction::place_auction() {
      std::vector<std::array<bool, 5>> increase = {{1,1,1,0,0}, {0,0,0,0,0}, {1,0,0,0,0}, {0,0,0,0,0}, {1,1,1,1,0}};
 
         for(int i = 0; i< list_of_products.size(); i++) {
-            AuctionProduct product(list_of_products.at(i).price, list_of_products.at(i).fish_type, list_of_products.at(i).quantity);
+            AuctionProduct product(list_of_products.at(i).price, list_of_products.at(i).fish_type, list_of_products.at(i).quantity, list_of_products.at(i).fisherman_name, list_of_products.at(i).fisherman_surname);
             //timer starts here
                 std::thread t(BidListener, product, increase.at(i));
 
                 t.join();
 
-                std::cout << list_of_products.at(i).fish_type << std::endl;
-                std::cout << "represented " <<std::endl;
-
         }
-
+        std::cout << "first round finished" << std::endl;
         std::cout << second_round_list_of_products.size() << std::endl;
 
         for (int l=0; l<second_round_list_of_products.size(); l++) {

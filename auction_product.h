@@ -10,9 +10,10 @@ public:
         int final_price;
         static int initial;
         int base_price;
-        uint32_t represented_time = 0;
+        int represented_time = 0;
+        std::string fisherman;
 
-        AuctionProduct(int base_price, std::string &fish_type, double quantity);
+        AuctionProduct(int base_price, std::string &fish_type, double quantity, std::string fisherman_name, std::string fisherman_surname);
         void IncreasePrice(int added);
         void DeliverFinalPrice();
         

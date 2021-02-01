@@ -4,12 +4,13 @@
 
 int AuctionProduct::initial = 0;
 
-AuctionProduct::AuctionProduct(int price, std::string &fish_type, double quantity) {
+AuctionProduct::AuctionProduct(int price, std::string &fish_type, double quantity,  std::string fisherman_name, std::string fisherman_surname) {
        
         AuctionProduct::initial = price;
         AuctionProduct::base_price = price;
         AuctionProduct::type = fish_type;
-        std::cout << "product base price is: " << std::endl;
+        AuctionProduct::fisherman = fisherman_name + fisherman_surname;
+        std::cout << fish_type + " from " + fisherman + ", product base price is: " << std::endl;
         std::cout << base_price << std::endl;
 
 }
