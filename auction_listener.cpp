@@ -213,14 +213,14 @@ void AuctionListener::msg_consume(RdKafka::Message* message, std::vector<fish_pr
                               
                 list_of_products.push_back(product);
            
-                std::cout << "one item added to the list of products" << std::endl;    
-                std::cout << product.fish_id << std::endl;
-                std::cout << product.fish_type << std::endl;
-                std::cout << product.quantity << std::endl;
-                std::cout << product.fisherman_id << std::endl;
-                std::cout << product.fisherman_name << std::endl;
-                std::cout << product.fisherman_surname << std::endl;
-                std::cout << product.price << std::endl;      
+                std::cout << "one item added to the list of products : " + product.fish_type << std::endl;    
+                // std::cout << product.fish_id << std::endl;
+                // std::cout << product.fish_type << std::endl;
+                // std::cout << product.quantity << std::endl;
+                // std::cout << product.fisherman_id << std::endl;
+                // std::cout << product.fisherman_name << std::endl;
+                // std::cout << product.fisherman_surname << std::endl;
+                // std::cout << product.price << std::endl;      
       }
       break;
 
@@ -240,7 +240,6 @@ void AuctionListener::msg_consume(RdKafka::Message* message, std::vector<fish_pr
       break;
 
     default:
-      /* Errors */
       std::cerr << "Consume failed: " << message->errstr() << std::endl;
       run = 0;
   }

@@ -1,0 +1,56 @@
+
+###########################################
+Fish Auction Consumer: Auction Service 
+
+Auction Service is a combination of two microservices normally. 
+One of them is Auction : communicates with the Register Microservice. Another is for listening the 'bid' s from the users, and delivering the main Auction Service. 
+
+We here handled only main Auction service, but we have a "BidListener" method, which simulates as if there is a Bid Listener Service and delivers it to the main Auction Service. Which giving hardcoded statements about bid existence or nonexistence. 
+
+We have an auction_listener class which is listeneing the Register Service and gets the registered products.
+
+In our design, there is a timer which starts the Auction service after all registtering operation fisnishes. But we run this program any hour of the day, so you need to prompt with 'Ctrl-C' after you register all your products and you are ready for the auction takes place.
+
+First you need to download Kafka:
+
+ Download the latest Kafka release and extract it:
+
+	$ tar -xzf kafka_2.13-2.7.0.tgz
+	$ cd kafka_2.13-2.7.0
+
+Then you need to start Kafka environmen:
+
+	 NOTE: Your local environment must have Java 8+ installed.
+
+	Run the following commands in order to start all services in the correct order:
+
+	# Start the ZooKeeper service
+	# Note: Soon, ZooKeeper will no longer be required by Apache Kafka.
+	$ bin/zookeeper-server-start.sh config/zookeeper.properties
+
+	Open another terminal session and run:
+
+	# Start the Kafka broker service
+	$ bin/kafka-server-start.sh config/server.properties
+
+	Once all services have successfully launched, you will have a basic Kafka environment running and ready to use. 
+
+> In order to run the Auction Microservice, which is a consumer, run:
+
+$ apt install librdkafka-dev
+
+> Then you need to build the code with 
+
+$ make
+
+> Then 
+
+$ ./auction_test 
+
+will run the Auction Microservice which will call the AuctionListener kafka cunsumer.
+
+
+References:
+
+https://kafka.apache.org/quickstart
+https://github.com/edenhill/librdkafka

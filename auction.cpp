@@ -36,8 +36,6 @@ void SendBack(AuctionProduct &product) {
 }
 
 
-
-
 void BidListener(AuctionProduct product, std::array<bool, 5> arr) {
 
         int added = 10;
@@ -45,7 +43,7 @@ void BidListener(AuctionProduct product, std::array<bool, 5> arr) {
 
         for (int i=0; i < 5; i++) {
             if (arr[i] == 1)
-                std::this_thread::sleep_for (std::chrono::seconds(1));
+                //std::this_thread::sleep_for (std::chrono::seconds(1));
                 product.IncreasePrice(added);
                 std::cout << "increased price of the product:" + product.type << std::endl;
                 std::cout << product.initial << std::endl;
